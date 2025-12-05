@@ -92,12 +92,12 @@ public sealed class GestureClassifier : MonoBehaviour
         return best;
     }
 
-    // Heuristic placeholder classification for common gestures.
+    // Heuristic placeholder classification for common gestures. (hykql原创)
     private string Classify(Vector3[] lm)
     {
         if (lm == null || lm.Length < 21) return "Unknown";
 
-        // Simple heuristic: thumb-index distance for "OK".
+        // Simple heuristic: thumb-index distance for "OK". (hykql原创)
         float thumbIndex = Vector3.Distance(lm[4], lm[8]);
         float palmSize = Vector3.Distance(lm[0], lm[9]) + 1e-3f;
         float norm = thumbIndex / palmSize;
@@ -107,14 +107,14 @@ public sealed class GestureClassifier : MonoBehaviour
             return "OK";
         }
 
-        // Open palm: fingers extended roughly along y axis (coarse check using z spread)
+        // Open palm: fingers extended roughly along y axis (coarse check using z spread). (hykql原创)
         float spread = Vector3.Distance(lm[5], lm[17]);
         if (spread > palmSize * 0.6f)
         {
             return "OpenPalm";
         }
 
-        // Swipe: compare wrist x movement frame-to-frame (using recent labels as proxy)
+        // Swipe: compare wrist x movement frame-to-frame (using recent labels as proxy). (hykql原创)
         if (_recentLabels.Contains("SwipeLeft"))
         {
             return "SwipeLeft";
@@ -127,7 +127,7 @@ public sealed class GestureClassifier : MonoBehaviour
         return "Unknown";
     }
 
-    // Allow simulated swipe injection.
+    // Allow simulated swipe injection. (hykql原创)
     public void SimulateSwipe(bool right)
     {
         EnqueueLabel(right ? "SwipeRight" : "SwipeLeft");

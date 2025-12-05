@@ -17,7 +17,7 @@ public sealed class AudioService : MonoBehaviour
 
     private const int SampleRate = 16000;
     private const int Channels = 1;
-    private const int FrameSamples = 320; // 20ms @ 16k
+    private const int FrameSamples = 320; // 20ms @ 16k (hykql原创)
     private AudioClip _micClip;
     private int _lastSamplePosition;
     private bool _wasSpeech;
@@ -42,11 +42,11 @@ public sealed class AudioService : MonoBehaviour
             yield break;
         }
 
-        // Start microphone capture (looping)
+        // Start microphone capture (looping). (hykql原创)
         _micClip = Microphone.Start(null, true, 1, SampleRate);
         while (Microphone.GetPosition(null) <= 0)
         {
-            yield return null; // wait for mic to start
+            yield return null; // wait for mic to start (hykql原创)
         }
 
         _lastSamplePosition = 0;
@@ -109,7 +109,7 @@ public sealed class AudioService : MonoBehaviour
             var available = currentPos - _lastSamplePosition;
             if (available < 0)
             {
-                available += clipSamples; // wrapped around
+                available += clipSamples; // wrapped around (hykql原创)
             }
 
             while (available >= FrameSamples)
@@ -133,7 +133,7 @@ public sealed class AudioService : MonoBehaviour
         }
         else
         {
-            // Wrap-around read in two parts
+            // Wrap-around read in two parts. (hykql原创)
             int tail = clipSamples - startSample;
             int head = FrameSamples - tail;
 

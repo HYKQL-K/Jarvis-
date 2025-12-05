@@ -18,7 +18,7 @@ public static class PlatformActions
         }
         catch (Exception ex)
         {
-            // 修复点：明确指定使用 UnityEngine.Debug
+            // Explicitly use UnityEngine.Debug for platform logging. (hykql原创)
             UnityEngine.Debug.LogError("Failed to open calculator: " + ex.Message);
         }
 #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
@@ -28,7 +28,7 @@ public static class PlatformActions
         }
         catch (Exception ex)
         {
-            // 修复点：明确指定使用 UnityEngine.Debug
+            // Explicitly use UnityEngine.Debug for platform logging. (hykql原创)
             UnityEngine.Debug.LogError("Failed to open calculator: " + ex.Message);
         }
 #else
@@ -46,7 +46,7 @@ public static class PlatformActions
         }
         catch (Exception ex)
         {
-            // 修复点：明确指定使用 UnityEngine.Debug
+            // Explicitly use UnityEngine.Debug for platform logging. (hykql原创)
             UnityEngine.Debug.LogError("Failed to open browser: " + ex.Message);
         }
 #else
@@ -58,7 +58,7 @@ public static class PlatformActions
     {
         if (string.IsNullOrEmpty(app))
         {
-            // 修复点：明确指定使用 UnityEngine.Debug
+            // Explicitly use UnityEngine.Debug for platform logging. (hykql原创)
             UnityEngine.Debug.Log("OpenApp called with empty app name");
             return;
         }
@@ -72,7 +72,7 @@ public static class PlatformActions
                 OpenBrowser();
                 break;
             default:
-                // 修复点：明确指定使用 UnityEngine.Debug
+                // Explicitly use UnityEngine.Debug for platform logging. (hykql原创)
                 UnityEngine.Debug.Log($"Unknown app: {app}");
                 break;
         }

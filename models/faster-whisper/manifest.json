@@ -1,6 +1,0 @@
-{
-  "models": [
-    { "name": "small-int8-zh", "file": "small-int8-zh.bin" },
-    { "name": "medium-fp16-zh", "file": "medium-fp16-zh.bin" }
-  ]
-}

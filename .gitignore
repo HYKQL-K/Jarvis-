@@ -3,6 +3,8 @@ node_modules/
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+models/
+smoke.log
 
 # Build outputs
 dist/
@@ -45,3 +47,5 @@ apps/unity/Temp/
 apps/unity/Logs/
 apps/unity/Obj/
 apps/unity/UserSettings/
+apps/unity/Assets/TextMesh Pro/Examples & Extras/
+apps/unity/Assets/TextMesh Pro/Documentation/

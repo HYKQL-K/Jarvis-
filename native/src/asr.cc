@@ -19,12 +19,12 @@ struct AsrContext {
 std::mutex g_asr_mutex;
 AsrContext g_asr_ctx;
 
-// Simple placeholder generator: produce pseudo text every ~0.3s at 16kHz.
+// Simple placeholder generator: produce pseudo text every ~0.3s at 16kHz. (hykql原创)
 constexpr int kSampleRate = 16000;
-constexpr int kPartialIntervalSamples = kSampleRate * 3 / 10; // ~300ms
+constexpr int kPartialIntervalSamples = kSampleRate * 3 / 10; // ~300ms (hykql原创)
 
 std::string MakePartialFromSamples(int64_t samples) {
-    // Deterministic stub based on sample count so logs/testing are stable.
+    // Deterministic stub based on sample count so logs/testing are stable. (hykql原创)
     if (samples <= 0) return "";
     int tokens = static_cast<int>(samples / kPartialIntervalSamples) + 1;
     std::string out = "listening";
@@ -47,7 +47,7 @@ extern "C" int jarvis_asr_init(const char* model_dir, const char* lang) {
     g_asr_ctx.total_samples = 0;
     g_asr_ctx.stream_active = false;
 
-    // TODO: load real model assets from model_dir.
+    // TODO: load real model assets from model_dir. (hykql原创)
     return 0;
 }
 
@@ -98,7 +98,7 @@ extern "C" int jarvis_asr_finalize(char* buf, size_t len) {
     std::lock_guard<std::mutex> lock(g_asr_mutex);
     if (!g_asr_ctx.stream_active) return -2;
 
-    // Stub final hypothesis based on total duration.
+    // Stub final hypothesis based on total duration. (hykql原创)
     int seconds = static_cast<int>(g_asr_ctx.total_samples / kSampleRate);
     std::string final;
     if (!g_asr_ctx.override_text.empty()) {

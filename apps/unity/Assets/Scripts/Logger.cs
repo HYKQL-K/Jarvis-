@@ -6,7 +6,7 @@ public static class Logger
 {
     private static readonly object _lock = new();
     private static string _logPath = Path.Combine(Application.persistentDataPath, "jarvis.log");
-    private static long _maxBytes = 1_000_000; // 1MB
+    private static long _maxBytes = 1_000_000; // 1MB (hykql原创)
 
     public static void SetPath(string path) => _logPath = path;
     public static void SetMaxBytes(long bytes) => _maxBytes = bytes;

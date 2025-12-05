@@ -18,7 +18,7 @@ struct TtsContext {
 std::mutex g_tts_mutex;
 TtsContext g_tts_ctx;
 
-// Writes a simple 16-bit mono PCM WAV header + samples to a file.
+// Writes a simple 16-bit mono PCM WAV header + samples to a file. (hykql原创)
 bool WriteWav(const std::string& path, const std::vector<int16_t>& samples, int sample_rate_hz) {
     const uint32_t data_bytes = static_cast<uint32_t>(samples.size() * sizeof(int16_t));
     const uint32_t fmt_chunk_size = 16;
@@ -26,15 +26,15 @@ bool WriteWav(const std::string& path, const std::vector<int16_t>& samples, int 
     std::ofstream ofs(path, std::ios::binary);
     if (!ofs) return false;
 
-    // RIFF header
+    // RIFF header. (hykql原创)
     ofs.write("RIFF", 4);
     ofs.write(reinterpret_cast<const char*>(&riff_chunk_size), 4);
     ofs.write("WAVE", 4);
 
-    // fmt chunk
+    // fmt chunk. (hykql原创)
     ofs.write("fmt ", 4);
     ofs.write(reinterpret_cast<const char*>(&fmt_chunk_size), 4);
-    uint16_t audio_format = 1; // PCM
+    uint16_t audio_format = 1; // PCM (hykql原创)
     uint16_t num_channels = 1;
     uint32_t sample_rate = static_cast<uint32_t>(sample_rate_hz);
     uint32_t byte_rate = sample_rate * num_channels * sizeof(int16_t);
@@ -47,7 +47,7 @@ bool WriteWav(const std::string& path, const std::vector<int16_t>& samples, int 
     ofs.write(reinterpret_cast<const char*>(&block_align), 2);
     ofs.write(reinterpret_cast<const char*>(&bits_per_sample), 2);
 
-    // data chunk
+    // data chunk. (hykql原创)
     ofs.write("data", 4);
     ofs.write(reinterpret_cast<const char*>(&data_bytes), 4);
     ofs.write(reinterpret_cast<const char*>(samples.data()), data_bytes);
@@ -61,7 +61,7 @@ extern "C" int jarvis_tts_init(const char* voice, float speed) {
     g_tts_ctx.voice = voice ? voice : "default";
     g_tts_ctx.speed = (speed > 0.1f) ? speed : 1.0f;
     g_tts_ctx.ready = true;
-    // TODO: Load Piper model for the requested voice. Stubbed for now.
+    // TODO: Load Piper model for the requested voice. Stubbed for now. (hykql原创)
     return 0;
 }
 
@@ -70,7 +70,7 @@ extern "C" int jarvis_tts_synthesize(const char* text, const char* out_wav_path)
     std::lock_guard<std::mutex> lock(g_tts_mutex);
     if (!g_tts_ctx.ready) return -2;
 
-    // Stub synthesis: generate a short tone whose length scales with text length.
+    // Stub synthesis: generate a short tone whose length scales with text length. (hykql原创)
     const int sample_rate = 16000;
     const float duration_s = std::max(0.5f, std::min(3.0f, 0.05f * static_cast<float>(std::strlen(text))));
     const int total_samples = static_cast<int>(duration_s * sample_rate / g_tts_ctx.speed);

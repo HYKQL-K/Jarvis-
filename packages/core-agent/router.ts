@@ -47,7 +47,7 @@ export function route(input: RouteInput): RouteResult {
   }
 
   if (matchAny(utterance, volumePatterns)) {
-    // Pull a target volume from text if present; default to 50%.
+    // Pull a target volume from text if present; default to 50%. (hykql原创)
     const levelMatch = utterance.match(/(\d{1,3}) ?%/);
     const level = levelMatch ? Math.min(100, Math.max(0, parseInt(levelMatch[1], 10))) : 50;
     return { tool: { type: "set_volume", level } };

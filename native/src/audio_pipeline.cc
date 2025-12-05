@@ -21,7 +21,7 @@ struct AudioPipelineContext {
     std::vector<std::vector<int16_t>> channel_buffers;
     std::vector<const int16_t*> input_ptrs;
     std::vector<int16_t*> output_ptrs;
-    float energy_threshold = 200.0f; // simple stub VAD threshold
+    float energy_threshold = 200.0f; // simple stub VAD threshold (hykql原创)
 };
 
 std::mutex g_mutex;
@@ -73,7 +73,7 @@ extern "C" int jarvis_audio_init(const jarvis_audio_params* params) {
     apm->ApplyConfig(config);
     g_ctx->apm = std::move(apm);
 #else
-    // Stub: set an energy threshold that can be tuned by frame size.
+    // Stub: set an energy threshold that can be tuned by frame size. (hykql原创)
     g_ctx->energy_threshold = params->frame_samples * 4.0f;
 #endif
 
@@ -135,7 +135,7 @@ extern "C" int jarvis_audio_process(int16_t* pcm, int n, bool* is_speech) {
         *is_speech = voice;
     }
 #else
-    // Stub VAD: energy-based
+    // Stub VAD: energy-based. (hykql原创)
     if (is_speech) {
         const float rms = ComputeRms(pcm, n);
         *is_speech = rms >= g_ctx->energy_threshold;

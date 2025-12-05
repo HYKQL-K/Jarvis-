@@ -59,7 +59,7 @@ public sealed class HudController : MonoBehaviour
 
     private void Reset()
     {
-        // Auto-wire references when added in the editor.
+        // Auto-wire references when added in the editor. (hykql原创)
         hudCanvas = GetComponentInChildren<Canvas>();
         subtitle = GetComponentInChildren<TextMeshProUGUI>();
         if (statusRing == null)

@@ -1,43 +1,98 @@
-# Jarvis Assistant Monorepo
+<h1 align="center">Jarvis Assistant Monorepo :sparkles:</h1>
 [中文 README](README.md)
 
 ## Overview
-Unified repo for a voice/multimodal assistant, including the Unity app, native C/C++ layer, shared packages, model assets, and automation scripts.
+Lean voice/multimodal assistant repo: Unity app, native C/C++ layer, TypeScript packages, model manifests, and automation scripts. Bulky Unity TextMesh Pro demo assets and local model binaries are removed; only core scenes and code remain.
 
-## Tech Stack
-- Node.js + pnpm (monorepo workspaces)
-- TypeScript (core routing and RAG components)
-- CMake + Ninja (native modules)
-- Unity (front-end experience)
+## Recommended Environment
+- OS: Windows 10/11
+- Node.js 18+, pnpm (via corepack), Git
+- CMake ≥ 3.26, Ninja
+- Visual Studio Build Tools with C++ workload (build from “x64 Native Tools Command Prompt”)
+- Unity version: see `apps/unity/ProjectSettings/ProjectVersion.txt`
+- curl for model downloads
 
 ## Structure
-- `apps/`: runtime apps (e.g., `unity`)
+- `apps/`: runtime apps (`unity`)
 - `native/`: native layer (`include/jarvis`, `src`, `cmake`)
 - `packages/`: shared packages (`core-agent`, `rag`, `sdk`, etc.)
-- `models/`: model artifacts and manifests
-- `assets/`: media and prompt assets
-- `configs/`: environment and tooling configs
-- `scripts/`: automation scripts
-- `tests/`, `benchmarks/`, `docs/`: testing, perf, docs
-- `.github/workflows/`: CI workflows
+- `models/`: model storage (repo ships no models; fetch or place manually)
+- `assets/`, `configs/`, `scripts/`, `tests/`, `benchmarks/`, `.github/workflows/`
 
 ## Architecture
 ```mermaid
 graph TD
-  UI[Unity app (apps/unity)] -->|RPC/events| Core[@jarvis/core-agent]
-  Core --> RAG[@jarvis/rag]
-  Core --> Native[native C/C++]
-  Native --> Models[models/*]
-  Core --> Tools[packages/sdk + tools]
-  Core --> Assets[assets/*]
+  ui[Unity app (apps/unity)]
+  core[Core (@jarvis/core-agent)]
+  rag[RAG (@jarvis/rag)]
+  native[Native (C/C++)]
+  models[Models (models/*)]
+  tools[Tools (packages/sdk + tools)]
+  assets[Assets (assets/*)]
+
+  ui -->|RPC/events| core
+  core --> rag
+  core --> native
+  native --> models
+  core --> tools
+  core --> assets
 ```
 
-## How to Run (PC/Windows)
-1) Prereqs: Node.js, pnpm, cmake, Ninja, Unity (matching project version).
-2) Install deps: `pnpm install` (repo root).
-3) Fetch models: `./scripts/get_models.sh` (URLs are placeholders; replace with real sources).
-4) Build native: `cmake -S native -B native/build -G Ninja && cmake --build native/build`.
-5) Core tests: `pnpm -C packages/core-agent test`.
-6) Unity run: open `apps/unity`, load `Scenes/Demo.unity`, click Play; to build desktop, use Build Settings with Windows x86_64 and output to `build/desktop`.
-7) Smoke demo: `./scripts/run_smoke_demo.sh` (writes `smoke.log`).
-8) Stub scripts: `scripts/build_android.sh` and `scripts/build_desktop.ps1` are placeholders; use Unity Editor or a custom pipeline for real builds.
+## Step-by-Step (PC/Windows)
+1) Install prereqs: Node.js (corepack/pnpm), cmake, Ninja, Unity (matching ProjectVersion.txt), VS Build Tools (C++).
+2) Terminal at repo root.
+3) Dependencies:
+   ```bash
+   pnpm install
+   ```
+4) Models (downloaded on demand; repo ships none):
+   ```bash
+   ./scripts/get_models.sh
+   ```
+   - Edit URLs in the script to real, reachable links if needed.
+   - Or manually place models under `models/` with matching `manifest.json`.
+5) Native build:
+   ```bash
+   cmake -S native -B native/build -G Ninja
+   cmake --build native/build
+   ```
+   Run inside “x64 Native Tools Command Prompt for VS” if headers are missing.
+6) Core tests:
+   ```bash
+   pnpm -C packages/core-agent test
+   ```
+7) Unity preview: open `apps/unity`, load `Scenes/Demo.unity`, click Play.
+8) Desktop build: Unity > File > Build Settings, target Windows x86_64, Add Open Scenes, output to `build/desktop`.
+9) Smoke demo: `./scripts/run_smoke_demo.sh`, check `smoke.log` for wake/ASR lines.
+10) Stubs: `scripts/build_android.sh` and `scripts/build_desktop.ps1` are placeholders only.
+
+### Downloads & Models
+- `models/` is ignored by git; no binaries are tracked.
+- Use the script to fetch models; if offline, download manually and keep filenames consistent with manifests.
+- Ensure manifests reference the exact filenames placed under `models/<name>/`.
+
+### Quick Command Cheatsheet
+```bash
+pnpm install
+./scripts/get_models.sh
+cmake -S native -B native/build -G Ninja && cmake --build native/build
+pnpm -C packages/core-agent test
+```
+
+### Tips & Notes
+<details>
+  <summary>pnpm not found / install issues :thinking:</summary>
+  Run <code>corepack prepare pnpm@latest --activate && corepack enable</code>, then <code>pnpm install</code>.
+</details>
+<details>
+  <summary>Unity version mismatch :gear:</summary>
+  Check <code>apps/unity/ProjectSettings/ProjectVersion.txt</code> and open with that version via Unity Hub.
+</details>
+<details>
+  <summary>Model URLs are placeholders :link:</summary>
+  Replace the URLs in <code>scripts/get_models.sh</code> with working links or drop your own models into <code>models/</code> and update manifests.
+</details>
+<details>
+  <summary>Missing standard headers when building native :hammer:</summary>
+  Use the “x64 Native Tools Command Prompt for VS” to run cmake so MSVC env vars are set.
+</details>
